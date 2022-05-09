@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/testova_db?allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&
+      useSSL=false&serverTimezone=UTC
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate.ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show_sql: true
+    open-in-view: true
+
+server:
+  port: 8899
+  error:
+    include-message: always
+
+jasypt:
+  encryptor:
+    password: pass
+    algorithm: PBEWITHSHA1ANDDESEDE
