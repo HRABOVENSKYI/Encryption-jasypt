@@ -25,13 +25,7 @@ public class TestService {
 
     public List<TestModel> getMessages() {
         return testDao.findAll().stream()
-                .peek(tm -> {
-                    try {
-                        tm.setMessage(encryptor.decrypt(tm.getMessage()));
-                    } catch (EncryptionOperationNotPossibleException e) {
-                        throw new DecryptionException("Failed to decrypt credit cards' numbers");
-                    }
-                })
+                .peek(tm -> tm.setMessage(encryptor.decrypt(tm.getMessage())))
                 .collect(Collectors.toList());
     }
 
