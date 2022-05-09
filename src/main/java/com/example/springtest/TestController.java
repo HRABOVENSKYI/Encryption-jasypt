@@ -22,4 +22,13 @@ public class TestController {
         return testService.getMessages();
     }
 
+    @PutMapping("/{id}")
+    public String updateMessage(@PathVariable(name = "id") Long id, @RequestBody TestModel testModel) {
+        return testService.updateMessage(id, testModel);
+    }
+
+    @GetMapping("/{id}")
+    public TestModel getTestModelById(@PathVariable(name = "id") Long id) {
+        return testService.getTestModelByIdDecrypted(id);
+    }
 }

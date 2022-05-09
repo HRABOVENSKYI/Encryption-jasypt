@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,5 +33,23 @@ public class TestService {
                     }
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Transactional // allows us not to call .save() to update testModelFromDb, because it is on  the persistent state
+    public String updateMessage(Long id, TestModel testModel) {
+        TestModel testModelFromDb = getTestModelById(id);
+        testModelFromDb.setMessage(encryptor.encrypt(testModel.getMessage()));
+        return testModelFromDb.getMessage();
+    }
+
+    public TestModel getTestModelById(Long id) {
+        return testDao.findById(id).orElseThrow(() ->
+                new RuntimeException(String.format("Entity with id = %s not found", id)));
+    }
+
+    public TestModel getTestModelByIdDecrypted(Long id) {
+        TestModel testModel = getTestModelById(id);
+        testModel.setMessage(encryptor.decrypt(testModel.getMessage()));
+        return testModel;
     }
 }
